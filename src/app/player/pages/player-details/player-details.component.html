@@ -1,0 +1,6 @@
+<button mat-raised-button (click)="goBack()">Back</button>
+
+<app-player-card
+  [selectedPlayer]="player$ | async"
+  (received)="showReceivedValue($event)"
+></app-player-card>

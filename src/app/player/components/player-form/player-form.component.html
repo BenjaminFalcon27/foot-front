@@ -1,0 +1,63 @@
+<h2 mat-dialog-title>{{ title }}</h2>
+
+<form [formGroup]="playerForm" (ngSubmit)="onSubmit()">
+  <div class="form">
+    <mat-form-field appearance="outline">
+      <mat-label>ID</mat-label>
+      <input matInput formControlName="id" readonly />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>First Name</mat-label>
+      <input matInput formControlName="firstName" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Last Name</mat-label>
+      <input matInput formControlName="lastName" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Age</mat-label>
+      <input matInput formControlName="age" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Club</mat-label>
+      <input matInput formControlName="club" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Position</mat-label>
+      <input matInput formControlName="position" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Goals Number</mat-label>
+      <input matInput formControlName="goalsNumber" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Birth</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="birth" />
+      <mat-datepicker-toggle
+        matIconSuffix
+        [for]="picker"
+      ></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+  </div>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" mat-dialog-close>Annuler</button>
+    <button
+      mat-raised-button
+      type="submit"
+      cdkFocusInitial
+      color="warn"
+      [disabled]="!playerForm.valid || !playerForm.dirty"
+    >
+      {{ submitBtnName }}
+    </button>
+  </mat-dialog-actions>
+</form>
