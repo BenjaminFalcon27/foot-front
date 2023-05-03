@@ -50,7 +50,7 @@
           <button
             mat-icon-button
             color="warn"
-            (click)="delete(player); $event.stopPropagation()"
+            (click)="delete(player.id); $event.stopPropagation()"
           >
             <mat-icon>delete</mat-icon>
           </button>
@@ -64,5 +64,10 @@
         (click)="showPlayerDetails(row.id)"
       ></tr>
     </table>
+  </div>
+  <div class="btn-holder">
+    <button mat-raised-button color="primary" (click)="openPlayerForm()">
+      Add Player
+    </button>
   </div>
 </div>

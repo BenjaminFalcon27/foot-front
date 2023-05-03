@@ -6,6 +6,7 @@ import { PlayerComponent } from './player.component';
 import { SharedModule } from '../shared/shared.module';
 import { PlayerListComponent } from './pages/player-list/player-list.component';
 import { PlayerService } from './services/player.service';
+import { ClubService } from '../club/services/club.service';
 import { PlayerFormComponent } from './components/player-form/player-form.component';
 import { PlayerDetailsComponent } from './pages/player-details/player-details.component';
 import { PlayerCardComponent } from './components/player-card/player-card.component';
@@ -19,6 +20,6 @@ import { PlayerCardComponent } from './components/player-card/player-card.compon
     PlayerCardComponent,
   ],
   imports: [CommonModule, PlayerRoutingModule, SharedModule],
-  providers: [PlayerService],
+  providers: [PlayerService, ClubService],
 })
 export class PlayerModule {}

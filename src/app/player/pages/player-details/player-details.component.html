@@ -1,6 +1,17 @@
 <button mat-raised-button (click)="goBack()">Back</button>
-
-<app-player-card
-  [selectedPlayer]="player$ | async"
-  (received)="showReceivedValue($event)"
-></app-player-card>
+<mat-card class="custom-mat-card">
+  <mat-card-header>
+    <mat-card-title>Player Details</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="row">
+      <div class="col-6">
+        <p><strong>First Name:</strong> {{ (player$ | async)?.firstName }}</p>
+        <p><strong>Last Name:</strong> {{ (player$ | async)?.lastName }}</p>
+        <p><strong>Age:</strong> {{ (player$ | async)?.age }}</p>
+        <p><strong>Position:</strong> {{ (player$ | async)?.position }}</p>
+        <p><strong>Club:</strong> {{ (player$ | async)?.club["name"] }}</p>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

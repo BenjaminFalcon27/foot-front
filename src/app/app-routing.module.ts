@@ -14,6 +14,10 @@ const routes: Routes = [
       import('./player/player.module').then((m) => m.PlayerModule),
   },
   {
+    path: 'clubs',
+    loadChildren: () => import('./club/club.module').then((m) => m.ClubModule),
+  },
+  {
     path: '**',
     component: NotFoundComponent,
   },

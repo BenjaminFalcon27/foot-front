@@ -1,0 +1,47 @@
+<h2 mat-dialog-title>{{ title }}</h2>
+
+<form [formGroup]="clubForm" (ngSubmit)="onSubmit()">
+  <div class="form">
+    <mat-form-field appearance="outline">
+      <mat-label>ID</mat-label>
+      <input matInput formControlName="id" readonly />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Creation Date</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="creationDate" />
+      <mat-datepicker-toggle
+        matIconSuffix
+        [for]="picker"
+      ></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Players</mat-label>
+      <mat-select formControlName="players" placeholder="Players" multiple>
+        <mat-option *ngFor="let player of players" [value]="player.id">
+          {{ player.firstName }} {{ player.lastName }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" mat-dialog-close>Cancel</button>
+    <button
+      mat-raised-button
+      type="submit"
+      cdkFocusInitial
+      color="warn"
+      [disabled]="!clubForm.valid || !clubForm.dirty"
+    >
+      {{ submitBtnName }}
+    </button>
+  </mat-dialog-actions>
+</form>

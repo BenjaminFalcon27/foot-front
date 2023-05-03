@@ -1,10 +1,12 @@
 import { PlayerService } from '../../services/player.service';
-import { Component, Inject, OnDestroy } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Player } from '../../models/players';
+import { ClubService } from 'src/app/club/services/club.service';
+import { Club } from 'src/app/club/models/clubs';
 
 export interface PlayerFormData {
   isCreateForm: boolean;
@@ -16,8 +18,10 @@ export interface PlayerFormData {
   templateUrl: './player-form.component.html',
   styleUrls: ['./player-form.component.scss'],
 })
-export class PlayerFormComponent implements OnDestroy {
+export class PlayerFormComponent implements OnDestroy, OnInit {
   private destroy$: Subject<boolean> = new Subject<boolean>();
+
+  clubs: Club[] = [];
 
   playerForm = this.fb.group({
     id: [0, Validators.required],
@@ -35,11 +39,26 @@ export class PlayerFormComponent implements OnDestroy {
     @Inject(MAT_DIALOG_DATA) public data: PlayerFormData,
     private fb: FormBuilder,
     private playerService: PlayerService,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private clubService: ClubService
   ) {
     if (!data.isCreateForm) {
       this.playerForm.patchValue(data.player);
     }
+  }
+
+  ngOnInit(): void {
+    this.clubService
+      .get()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(
+        (res) => {
+          this.clubs = res;
+        },
+        (err) => {
+          console.log('Error fetching clubs', err);
+        }
+      );
   }
 
   ngOnDestroy(): void {
@@ -85,40 +104,24 @@ export class PlayerFormComponent implements OnDestroy {
         this.playerService
           .create(this.playerForm.value as Player)
           .pipe(takeUntil(this.destroy$))
-          .subscribe(
-            (res) => {
-              this._snackBar.open('Player created successfully', 'Close', {
-                duration: 2000,
-                panelClass: ['mat-toolbar', 'mat-primary'],
-              });
-              this.dialogRef.close();
-            },
-            (err) => {
-              this._snackBar.open('Error creating player', 'Close', {
-                duration: 2000,
-                panelClass: ['mat-toolbar', 'mat-warn'],
-              });
-            }
-          );
+          .subscribe((res) => {
+            this._snackBar.open('Player created successfully', 'Close', {
+              duration: 2000,
+              panelClass: ['mat-toolbar', 'mat-primary'],
+            });
+            this.dialogRef.close();
+          });
       } else {
         this.playerService
           .update(this.playerForm.value as Player)
           .pipe(takeUntil(this.destroy$))
-          .subscribe(
-            (res) => {
-              this._snackBar.open('Player updated successfully', 'Close', {
-                duration: 2000,
-                panelClass: ['mat-toolbar', 'mat-primary'],
-              });
-              this.dialogRef.close();
-            },
-            (err) => {
-              this._snackBar.open('Error updating player', 'Close', {
-                duration: 2000,
-                panelClass: ['mat-toolbar', 'mat-warn'],
-              });
-            }
-          );
+          .subscribe((res) => {
+            this._snackBar.open('Player updated successfully', 'Close', {
+              duration: 2000,
+              panelClass: ['mat-toolbar', 'mat-primary'],
+            });
+            this.dialogRef.close();
+          });
       }
     }
   }

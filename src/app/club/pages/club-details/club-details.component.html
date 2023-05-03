@@ -1,0 +1,24 @@
+<button mat-raised-button (click)="goBack()">Back</button>
+<mat-card class="custom-mat-card">
+  <mat-card-header>
+    <mat-card-title>Club Details</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="row">
+      <div class="col-6">
+        <p><strong>Name:</strong> {{ (club$ | async)?.name }}</p>
+        <p>
+          <strong>Creation Date:</strong> {{ (club$ | async)?.creationDate }}
+        </p>
+      </div>
+      <div class="col-6">
+        <p><strong>Players:</strong></p>
+        <ul>
+          <li *ngFor="let player of (club$ | async)?.players">
+            {{ player["firstName"] }} {{ player["lastName"] }}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

@@ -3,10 +3,15 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Player } from '../models/players';
 import { environment } from './../../../environments/environment';
+import { Club } from 'src/app/club/models/clubs';
 
 @Injectable()
 export class PlayerService {
   constructor(private http: HttpClient) {}
+
+  getClubs(): Observable<Club> {
+    return this.http.get<Club>(environment.footApiBaseUrl + '/clubs');
+  }
 
   get(): Observable<Player[]> {
     return this.http.get<Player[]>(environment.footApiBaseUrl + '/players');

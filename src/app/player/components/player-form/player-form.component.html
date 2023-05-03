@@ -24,7 +24,11 @@
 
     <mat-form-field appearance="outline">
       <mat-label>Club</mat-label>
-      <input matInput formControlName="club" />
+      <mat-select formControlName="club" placeholder="Club">
+        <mat-option *ngFor="let club of clubs" [value]="club.id">
+          {{ club.name }}
+        </mat-option>
+      </mat-select>
     </mat-form-field>
 
     <mat-form-field appearance="outline">

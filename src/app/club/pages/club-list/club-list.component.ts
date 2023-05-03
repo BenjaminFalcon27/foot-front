@@ -1,40 +1,31 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { GenericPopupComponent } from 'src/app/shared/components/generic-popup/generic-popup.component';
-import { PlayerFormComponent } from '../../components/player-form/player-form.component';
-import { Player } from '../../models/players';
-import { PlayerService } from '../../services/player.service';
+import { Club } from '../../models/clubs';
+import { ClubService } from '../../services/club.service';
 import { Router } from '@angular/router';
+import { ClubFormComponent } from '../../components/club-form/club-form.component';
 
 @Component({
-  selector: 'app-player-list',
-  templateUrl: './player-list.component.html',
-  styleUrls: ['./player-list.component.scss'],
+  selector: 'app-club-list',
+  templateUrl: './club-list.component.html',
+  styleUrls: ['./club-list.component.scss'],
 })
-export class PlayerListComponent implements OnInit, OnDestroy {
-  displayedColumns: string[] = [
-    'firstName',
-    'lastName',
-    'age',
-    'position',
-    'goalsNumber',
-    'birth',
-    'club',
-    'actions',
-  ];
-  players$: Observable<Player[]>;
+export class ClubListComponent implements OnInit {
+  displayedColumns: string[] = ['name', 'creationDate', 'actions'];
+  clubs$: Observable<Club[]>;
   private destroy$: Subject<boolean> = new Subject<boolean>();
   constructor(
-    private playerService: PlayerService,
+    private clubService: ClubService,
     private router: Router,
     private dialog: MatDialog,
     private _snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
-    this.players$ = this.playerService.get();
+    this.clubs$ = this.clubService.get();
   }
 
   ngOnDestroy(): void {
@@ -42,13 +33,13 @@ export class PlayerListComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  openPlayerForm(player?: Player) {
-    const dialogRef = this.dialog.open(PlayerFormComponent, {
+  openClubForm(club?: Club) {
+    const dialogRef = this.dialog.open(ClubFormComponent, {
       height: '85%',
       width: '60%',
       data: {
-        isCreateForm: player ? false : true,
-        player: player ? player : null,
+        isCreateForm: club ? false : true,
+        club: club ? club : null,
       },
     });
 
@@ -63,14 +54,14 @@ export class PlayerListComponent implements OnInit, OnDestroy {
   }
 
   fetchData() {
-    this.players$ = this.playerService.get();
+    this.clubs$ = this.clubService.get();
   }
 
   delete(id: number) {
-    const ref = this.dialog.open(GenericPopupComponent, {
+    const dialogRef = this.dialog.open(GenericPopupComponent, {
       data: {
         title: 'Confirm',
-        message: 'Are you sure you want to delete this player ?',
+        message: 'Are you sure you want to delete this club ?',
         typeMessage: 'warning',
         yesButtonVisible: true,
         noButtonVisible: true,
@@ -81,16 +72,16 @@ export class PlayerListComponent implements OnInit, OnDestroy {
       },
     });
 
-    ref
+    dialogRef
       .afterClosed()
       .pipe(takeUntil(this.destroy$))
       .subscribe((result) => {
         if (result) {
-          this.playerService
+          this.clubService
             .delete(id)
             .pipe(takeUntil(this.destroy$))
             .subscribe(() => {
-              this._snackBar.open('Player deleted', 'Close', {
+              this._snackBar.open('Club deleted', 'Close', {
                 duration: 2000,
                 panelClass: ['mat-toolbar', 'mat-primary'],
               });
@@ -100,7 +91,7 @@ export class PlayerListComponent implements OnInit, OnDestroy {
       });
   }
 
-  showPlayerDetails(id: number) {
-    this.router.navigate(['players', id]);
+  showClubDetails(id: number) {
+    this.router.navigate(['clubs', id]);
   }
 }
